@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  height: 100vh;
+}
+body {
+  min-height: 100vh;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+p {
+  font-size: 1.1em;
+  padding-bottom: 5px;
+}
+
+.centralize {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centralize-horizontal {
+  display: flex;
+  justify-content: center;
+}

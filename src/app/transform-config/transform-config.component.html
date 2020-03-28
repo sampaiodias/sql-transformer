@@ -1,11 +1,13 @@
 <p-panel header="Transform Settings">
   <div style="margin: 5px 0;">
-    <p>Dialect</p>
-    <p-dropdown
-      [style]="{ width: '100%' }"
-      [options]="dialectOptions"
-      [(ngModel)]="dialect"
-    ></p-dropdown>
+    <p>Entity Name</p>
+    <input
+      placeholder="Example: Shopping Cart"
+      style="width: 100%;"
+      type="text"
+      pInputText
+      [(ngModel)]="entityName"
+    />
   </div>
   <br />
   <div>
@@ -18,24 +20,22 @@
   </div>
   <br />
   <div>
-    <p>Entity Name</p>
-    <input
-      placeholder="Example: Shopping Cart"
-      style="width: 100%;"
-      type="text"
-      pInputText
-      [(ngModel)]="entityName"
-    />
+    <p>Dialect</p>
+    <p-dropdown
+      [style]="{ width: '100%' }"
+      [options]="dialectOptions"
+      [(ngModel)]="dialect"
+    ></p-dropdown>
   </div>
   <br />
   <div>
-    <p>Script (Create Table)</p>
+    <p>Variables (CSV)</p>
     <textarea
       pInputTextarea
       placeholder=""
       style="width: 100%; resize: vertical; max-height: 500px; min-height: 200px;"
       autoResize="true"
-      [(ngModel)]="sqlScript"
+      [(ngModel)]="script"
     ></textarea>
   </div>
   <br />

@@ -11,9 +11,8 @@ export class TransformConfigComponent implements OnInit {
 
   dialect: string;
   language: string;
-  entityName = 'Shopping Cart';
-  sqlScript =
-    'CREATE TABLE tb_shopping_cart (\n      id int PRIMARY KEY,\n      user_name varchar(255) NOT NULL,\n      item_count int\n);';
+  entityName = 'Product';
+  script = 'id,int\nname,varchar(255)\nprice,numeric\n';
 
   constructor() {}
 

@@ -12,6 +12,7 @@ import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     PanelModule,
     InputTextModule,
     ButtonModule,
-    InputTextareaModule
+    InputTextareaModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

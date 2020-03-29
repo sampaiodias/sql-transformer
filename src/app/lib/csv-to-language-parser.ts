@@ -1,4 +1,5 @@
 import { TypeTranslator } from './type-translator';
+import { toSnake, toKebab, toCamel, toPascal } from './util/casing-utils';
 
 export class CsvToLanguageParser {
   variables: Map<string, string>;
@@ -30,31 +31,10 @@ export class CsvToLanguageParser {
 
   private initializeNames(entityName: string) {
     this.entityName = entityName;
-    this.pascalName = this.entityName
-      .replace(
-        /\w\S*/g,
-        m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
-      )
-      .replace(/ /g, '');
-    this.camelName = this.entityName
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-    this.kebabName =
-      this.entityName &&
-      this.entityName
-        .match(
-          /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-        )
-        .map(x => x.toLowerCase())
-        .join('-');
-    this.snakeName =
-      this.entityName &&
-      this.entityName
-        .match(
-          /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-        )
-        .map(x => x.toLowerCase())
-        .join('_');
+    this.pascalName = toPascal(this.entityName);
+    this.camelName = toCamel(this.entityName);
+    this.kebabName = toKebab(this.entityName);
+    this.snakeName = toSnake(this.entityName);
   }
 
   transform(template: string): string {

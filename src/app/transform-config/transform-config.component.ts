@@ -11,9 +11,7 @@ import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
   styleUrls: ['./transform-config.component.scss']
 })
 export class TransformConfigComponent implements OnInit {
-  dialectOptions = [
-    { label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }
-  ];
+  dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
   languageOptions = [{ label: 'Java', value: ParseableLanguage.Java }];
 
   parser: CsvToLanguageParser;
@@ -45,11 +43,7 @@ export class TransformConfigComponent implements OnInit {
   private getParser(): CsvToLanguageParser {
     switch (this.dialect) {
       case ParseableDialect.PostgreSQL:
-        return new CsvToLanguageParser(
-          this.script,
-          this.entityName,
-          this.getTranslator()
-        );
+        return new CsvToLanguageParser(this.script, this.entityName, this.getTranslator());
       default:
         console.error('No parser found for dialect ' + this.dialect);
         return null;
@@ -61,12 +55,7 @@ export class TransformConfigComponent implements OnInit {
       case ParseableLanguage.Java:
         return new PostgreToJavaTranslator();
       default:
-        console.error(
-          'No parser found for language ' +
-            this.language +
-            ' using dialect ' +
-            this.dialect
-        );
+        console.error('No parser found for language ' + this.language + ' using dialect ' + this.dialect);
         return null;
     }
   }

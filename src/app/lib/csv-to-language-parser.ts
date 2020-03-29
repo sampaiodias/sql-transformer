@@ -44,41 +44,25 @@ export class CsvToLanguageParser {
       transformedTemplate = this.generateCustomVariables(transformedTemplate);
     }
 
+    transformedTemplate = this.replaceEntityNames(transformedTemplate);
+
+    return transformedTemplate;
+  }
+
+  private replaceEntityNames(transformedTemplate: string) {
     transformedTemplate = transformedTemplate
       .replace(new RegExp(/%ENTITY_NAME%/g), this.entityName)
-      .replace(
-        new RegExp(/%ENTITY_NAME_LOWER%/g),
-        this.entityName.toLowerCase()
-      )
-      .replace(
-        new RegExp(/%ENTITY_NAME_UPPER%/g),
-        this.entityName.toUpperCase()
-      )
+      .replace(new RegExp(/%ENTITY_NAME_LOWER%/g), this.entityName.toLowerCase())
+      .replace(new RegExp(/%ENTITY_NAME_UPPER%/g), this.entityName.toUpperCase())
       .replace(new RegExp(/%ENTITY_NAME_SNAKE%/g), this.snakeName)
-      .replace(
-        new RegExp(/%ENTITY_NAME_SNAKE_UPPER%/g),
-        this.snakeName.toUpperCase()
-      )
+      .replace(new RegExp(/%ENTITY_NAME_SNAKE_UPPER%/g), this.snakeName.toUpperCase())
       .replace(new RegExp(/%ENTITY_NAME_KEBAB%/g), this.kebabName)
-      .replace(
-        new RegExp(/%ENTITY_NAME_KEBAB_UPPER%/g),
-        this.kebabName.toUpperCase()
-      )
+      .replace(new RegExp(/%ENTITY_NAME_KEBAB_UPPER%/g), this.kebabName.toUpperCase())
       .replace(new RegExp(/%ENTITY_NAME_CAMEL%/g), this.camelName)
       .replace(new RegExp(/%ENTITY_NAME_PASCAL%/g), this.pascalName)
-      .replace(
-        new RegExp(/%ENTITY_NAME_SPACELESS%/g),
-        this.entityName.replace(/ /g, '')
-      )
-      .replace(
-        new RegExp(/%ENTITY_NAME_SPACELESS_UPPER%/g),
-        this.entityName.replace(/ /g, '').toUpperCase()
-      )
-      .replace(
-        new RegExp(/%ENTITY_NAME_SPACELESS_LOWER%/g),
-        this.entityName.replace(/ /g, '').toLowerCase()
-      );
-
+      .replace(new RegExp(/%ENTITY_NAME_SPACELESS%/g), this.entityName.replace(/ /g, ''))
+      .replace(new RegExp(/%ENTITY_NAME_SPACELESS_UPPER%/g), this.entityName.replace(/ /g, '').toUpperCase())
+      .replace(new RegExp(/%ENTITY_NAME_SPACELESS_LOWER%/g), this.entityName.replace(/ /g, '').toLowerCase());
     return transformedTemplate;
   }
 
@@ -91,15 +75,10 @@ export class CsvToLanguageParser {
     let v = '';
     for (const variable of this.variables) {
       v +=
-        variablesSection
-          .replace(new RegExp(/%VARIABLE_NAME%/g), variable[0])
-          .replace(new RegExp(/%VARIABLE_TYPE%/g), variable[1]) + '\n';
+        variablesSection.replace(new RegExp(/%VARIABLE_NAME%/g), variable[0]).replace(new RegExp(/%VARIABLE_TYPE%/g), variable[1]) + '\n';
     }
 
-    return template.replace(
-      '%VARIABLES_BEGIN%' + variablesSection + '%VARIABLES_END%',
-      v
-    );
+    return template.replace('%VARIABLES_BEGIN%' + variablesSection + '%VARIABLES_END%', v);
   }
 
   private translateType(type: string) {

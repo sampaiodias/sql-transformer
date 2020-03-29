@@ -1,31 +1,17 @@
 <p-panel header="Transform Settings">
   <div style="margin: 5px 0;">
     <p>Entity Name</p>
-    <input
-      placeholder="Example: Shopping Cart"
-      style="width: 100%;"
-      type="text"
-      pInputText
-      [(ngModel)]="entityName"
-    />
+    <input placeholder="Example: Shopping Cart" style="width: 100%;" type="text" pInputText [(ngModel)]="entityName" />
   </div>
   <br />
   <div>
     <p>Target Language</p>
-    <p-dropdown
-      [style]="{ width: '100%' }"
-      [options]="languageOptions"
-      [(ngModel)]="language"
-    ></p-dropdown>
+    <p-dropdown [style]="{ width: '100%' }" [options]="languageOptions" [(ngModel)]="language"></p-dropdown>
   </div>
   <br />
   <div>
     <p>Dialect</p>
-    <p-dropdown
-      [style]="{ width: '100%' }"
-      [options]="dialectOptions"
-      [(ngModel)]="dialect"
-    ></p-dropdown>
+    <p-dropdown [style]="{ width: '100%' }" [options]="dialectOptions" [(ngModel)]="dialect"></p-dropdown>
   </div>
   <br />
   <div>

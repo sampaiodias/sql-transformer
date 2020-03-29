@@ -13,12 +13,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
+import { TransformComponent } from './transform/transform.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TransformConfigComponent,
-    TransformOutputComponent
+    TransformOutputComponent,
+    TransformComponent
   ],
   imports: [
     BrowserModule,

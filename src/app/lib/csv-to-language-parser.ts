@@ -1,11 +1,26 @@
-import { CsvToLanguageParser } from './csv-to-language-parser';
+import { TypeTranslator } from './type-translator';
 
-export class PostgresToJavaParser extends CsvToLanguageParser {
+export class CsvToLanguageParser {
   entityName: string;
+  variables: Map<string, string>;
 
-  constructor(csv: string, entityName: string) {
-    super(csv);
+  constructor(csv: string, entityName: string, translator: TypeTranslator) {
     this.entityName = entityName;
+    this.variables = translator.typeMap();
+
+    const map = new Map<string, string>();
+    const data = csv
+      .replace('(', '')
+      .replace(')', '')
+      .replace(new RegExp('[0-9]', 'g'), '')
+      .replace(new RegExp('\r?\n', 'g'), ',')
+      .split(',');
+
+    for (let i = 0; i < data.length; i += 2) {
+      map.set(data[i], this.translateType(data[i + 1].toUpperCase()));
+    }
+
+    this.variables = map;
   }
 
   transform(template: string): string {
@@ -95,39 +110,7 @@ export class PostgresToJavaParser extends CsvToLanguageParser {
     );
   }
 
-  translateType(type: string): string {
-    switch (type) {
-      case 'CHARACTER':
-      case 'VARCHAR':
-      case 'LONGVARCHAR':
-        return 'String';
-      case 'NUMERIC':
-      case 'DECIMAL':
-        return 'BigDecimal';
-      case 'BIT':
-        return 'Boolean';
-      case 'TINYINT':
-      case 'SMALLINT':
-      case 'INTEGER':
-        return 'Integer';
-      case 'BIGINT':
-        return 'Long';
-      case 'REAL':
-        return 'Float';
-      case 'DOUBLE PRECISION':
-      case 'FLOAT':
-        return 'Double';
-      case 'BINARY':
-      case 'VARBINARY':
-      case 'LONGVARBINARY':
-        return 'byte[]';
-      case 'DATE':
-      case 'TIME':
-        return 'Date';
-      case 'TIMESTAMP':
-        return 'Timestamp';
-      default:
-        return type;
-    }
+  private translateType(type: string) {
+    return this.variables.get(type);
   }
 }

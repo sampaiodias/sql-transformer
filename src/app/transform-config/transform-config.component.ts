@@ -1,8 +1,9 @@
-import { ParseableLanguage } from './../parsers/parseable-languages';
-import { ParseableDialect } from './../parsers/parseable-dialect';
+import { TypeTranslator } from '../lib/type-translator';
+import { ParseableLanguage } from '../lib/enums/parseable-languages';
+import { ParseableDialect } from '../lib/enums/parseable-dialect';
 import { Component, OnInit } from '@angular/core';
-import { PostgresToJavaParser } from '../parsers/postgres-to-java-parser';
-import { CsvToLanguageParser } from '../parsers/csv-to-language-parser';
+import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-translator';
+import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
 
 @Component({
   selector: 'app-transform-config',
@@ -44,17 +45,21 @@ export class TransformConfigComponent implements OnInit {
   private getParser(): CsvToLanguageParser {
     switch (this.dialect) {
       case ParseableDialect.PostgreSQL:
-        return this.getPostgresParser();
+        return new CsvToLanguageParser(
+          this.script,
+          this.entityName,
+          this.getTranslator()
+        );
       default:
         console.error('No parser found for dialect ' + this.dialect);
         return null;
     }
   }
 
-  private getPostgresParser(): CsvToLanguageParser {
+  private getTranslator(): TypeTranslator {
     switch (this.language) {
       case ParseableLanguage.Java:
-        return new PostgresToJavaParser(this.script, this.entityName);
+        return new PostgreToJavaTranslator();
       default:
         console.error(
           'No parser found for language ' +

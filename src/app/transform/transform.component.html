@@ -1,6 +1,6 @@
 <div class="p-grid">
   <div class="p-col-4">
-    <app-transform-config></app-transform-config>
+    <app-transform-config (templatesReady)="templatesReady($event)"></app-transform-config>
   </div>
   <div class="p-col-8">
     <app-transform-output></app-transform-output>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { TransformOutputComponent } from './../transform-output/transform-output.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-transform',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./transform.component.scss']
 })
 export class TransformComponent implements OnInit {
+  @ViewChild(TransformOutputComponent, { static: false }) output: TransformOutputComponent;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  templatesReady(templates: Array<string>) {
+    this.output.printOutput(templates);
   }
-
 }

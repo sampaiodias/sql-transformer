@@ -1,9 +1,10 @@
 import { TypeTranslator } from '../lib/type-translator';
 import { ParseableLanguage } from '../lib/enums/parseable-languages';
 import { ParseableDialect } from '../lib/enums/parseable-dialect';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-translator';
 import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-transform-config',
@@ -20,6 +21,9 @@ export class TransformConfigComponent implements OnInit {
   entityName = 'Favorite Product';
   script = 'id,integer\nname,varchar(255)\nprice,numeric';
 
+  @Output()
+  templatesReady: EventEmitter<Array<string>> = new EventEmitter<Array<string>>();
+
   constructor() {}
 
   ngOnInit() {
@@ -30,11 +34,11 @@ export class TransformConfigComponent implements OnInit {
   transformButton() {
     try {
       this.parser = this.getParser();
-      console.log(
+      this.templatesReady.emit([
         this.parser.transform(
           'package org.test;\n\n@Entity\n@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")\npublic class %ENTITY_NAME_PASCAL% {\n%VARIABLES_BEGIN%   @Column(name="%VARIABLE_NAME%")\n   private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;%VARIABLES_END%\n}\n'
         )
-      );
+      ]);
     } catch (error) {
       console.log(error);
     }

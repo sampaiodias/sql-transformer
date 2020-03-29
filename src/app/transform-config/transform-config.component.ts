@@ -1,3 +1,5 @@
+import { ParseableLanguage } from './../parsers/parseable-languages';
+import { ParseableDialect } from './../parsers/parseable-dialect';
 import { Component, OnInit } from '@angular/core';
 import { PostgresToJavaParser } from '../parsers/postgres-to-java-parser';
 import { CsvToLanguageParser } from '../parsers/csv-to-language-parser';
@@ -8,12 +10,14 @@ import { CsvToLanguageParser } from '../parsers/csv-to-language-parser';
   styleUrls: ['./transform-config.component.scss']
 })
 export class TransformConfigComponent implements OnInit {
-  dialectOptions = [{ label: 'PostgreSQL', value: 'PostgreSQL' }];
-  languageOptions = [{ label: 'Java', value: 'Java' }];
+  dialectOptions = [
+    { label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }
+  ];
+  languageOptions = [{ label: 'Java', value: ParseableLanguage.Java }];
 
   parser: CsvToLanguageParser;
-  dialect: string;
-  language: string;
+  dialect: ParseableDialect;
+  language: ParseableLanguage;
   entityName = 'Product';
   script = 'id,integer\nname,varchar(255)\nprice,numeric';
 
@@ -37,7 +41,7 @@ export class TransformConfigComponent implements OnInit {
 
   private initializeParser() {
     switch (this.dialect) {
-      case 'PostgreSQL':
+      case ParseableDialect.PostgreSQL:
         this.initializePostgresParser();
         break;
       default:
@@ -48,7 +52,7 @@ export class TransformConfigComponent implements OnInit {
 
   private initializePostgresParser() {
     switch (this.language) {
-      case 'Java':
+      case ParseableLanguage.Java:
         this.parser = new PostgresToJavaParser(this.script, this.entityName);
         break;
       default:

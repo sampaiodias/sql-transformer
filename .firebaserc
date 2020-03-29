@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "sql-transformer": {
+      "hosting": {
+        "sql-transformer": [
+          "sql-transformer"
+        ]
+      }
+    }
+  }
+}

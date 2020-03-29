@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "sql-transformer",
+      "public": "dist/sql-transformer",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

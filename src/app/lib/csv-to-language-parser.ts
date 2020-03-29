@@ -51,18 +51,18 @@ export class CsvToLanguageParser {
 
   private replaceEntityNames(transformedTemplate: string) {
     transformedTemplate = transformedTemplate
-      .replace(new RegExp(/%ENTITY_NAME%/g), this.entityName)
-      .replace(new RegExp(/%ENTITY_NAME_LOWER%/g), this.entityName.toLowerCase())
-      .replace(new RegExp(/%ENTITY_NAME_UPPER%/g), this.entityName.toUpperCase())
-      .replace(new RegExp(/%ENTITY_NAME_SNAKE%/g), this.snakeName)
-      .replace(new RegExp(/%ENTITY_NAME_SNAKE_UPPER%/g), this.snakeName.toUpperCase())
-      .replace(new RegExp(/%ENTITY_NAME_KEBAB%/g), this.kebabName)
-      .replace(new RegExp(/%ENTITY_NAME_KEBAB_UPPER%/g), this.kebabName.toUpperCase())
-      .replace(new RegExp(/%ENTITY_NAME_CAMEL%/g), this.camelName)
-      .replace(new RegExp(/%ENTITY_NAME_PASCAL%/g), this.pascalName)
-      .replace(new RegExp(/%ENTITY_NAME_SPACELESS%/g), this.entityName.replace(/ /g, ''))
-      .replace(new RegExp(/%ENTITY_NAME_SPACELESS_UPPER%/g), this.entityName.replace(/ /g, '').toUpperCase())
-      .replace(new RegExp(/%ENTITY_NAME_SPACELESS_LOWER%/g), this.entityName.replace(/ /g, '').toLowerCase());
+      .replace(/%ENTITY_NAME%/g, this.entityName)
+      .replace(/%ENTITY_NAME_LOWER%/g, this.entityName.toLowerCase())
+      .replace(/%ENTITY_NAME_UPPER%/g, this.entityName.toUpperCase())
+      .replace(/%ENTITY_NAME_SNAKE%/g, this.snakeName)
+      .replace(/%ENTITY_NAME_SNAKE_UPPER%/g, this.snakeName.toUpperCase())
+      .replace(/%ENTITY_NAME_KEBAB%/g, this.kebabName)
+      .replace(/%ENTITY_NAME_KEBAB_UPPER%/g, this.kebabName.toUpperCase())
+      .replace(/%ENTITY_NAME_CAMEL%/g, this.camelName)
+      .replace(/%ENTITY_NAME_PASCAL%/g, this.pascalName)
+      .replace(/%ENTITY_NAME_SPACELESS%/g, this.entityName.replace(/ /g, ''))
+      .replace(/%ENTITY_NAME_SPACELESS_UPPER%/g, this.entityName.replace(/ /g, '').toUpperCase())
+      .replace(/%ENTITY_NAME_SPACELESS_LOWER%/g, this.entityName.replace(/ /g, '').toLowerCase());
     return transformedTemplate;
   }
 
@@ -74,8 +74,19 @@ export class CsvToLanguageParser {
 
     let v = '';
     for (const variable of this.variables) {
-      v +=
-        variablesSection.replace(new RegExp(/%VARIABLE_NAME%/g), variable[0]).replace(new RegExp(/%VARIABLE_TYPE%/g), variable[1]) + '\n';
+      let newSection = variablesSection
+        .replace(/%VARIABLE_TYPE%/g, variable[1])
+        .replace(/%VARIABLE_NAME%/g, variable[0])
+        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(variable[0]))
+        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(variable[0]))
+        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(variable[0]))
+        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(variable[0]).toUpperCase())
+        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(variable[0]).toLowerCase())
+        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(variable[0]))
+        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(variable[0]).toUpperCase())
+        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(variable[0]).toLowerCase());
+      newSection += '\n';
+      v += newSection;
     }
 
     return template.replace('%VARIABLES_BEGIN%' + variablesSection + '%VARIABLES_END%', v);

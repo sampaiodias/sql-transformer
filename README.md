@@ -1,6 +1,6 @@
 # SQL Transformer
 
-SQL Transformer is an open-source web application that transforms a special CSV (that contains the variables of a SQL table) into other programming files (like classes) using custom templates.
+SQL Transformer is an open-source web application that transforms a special CSV that contains the variables of a SQL table into other programming files (like classes and interfaces) using custom templates.
 
 ## Template Examples
 
@@ -10,7 +10,9 @@ SQL Transformer is an open-source web application that transforms a special CSV 
 package org.test;
 
 public class %CLASS_NAME% {
-%VARIABLES%
+%VARIABLES_BEGIN%
+    private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
+%VARIABLES_END%
 }
 ```
 
@@ -27,7 +29,7 @@ public class %CLASS_NAME% {
     private Long id;
 %VARIABLES_BEGIN%
     @Column(name="%VARIABLE_NAME%")
-    private %VARIABLE_TYPE% %VARIABLE_NAME%;
+    private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
 %VARIABLES_END%
 }
 ```
@@ -35,12 +37,7 @@ public class %CLASS_NAME% {
 
 ## Template Dictionary
 
-These are the special words replaced by the transformer:
-
-- %VARIABLES_BEGIN%
-- %VARIABLES_END%
-- %VARIABLE_TYPE%
-- %VARIABLE_NAME%
+These are the special words replaced by the transformer anywhere:
 
 - %ENTITY_NAME%
 - %ENTITY_NAME_LOWER%
@@ -54,3 +51,15 @@ These are the special words replaced by the transformer:
 - %ENTITY_NAME_SPACELESS%
 - %ENTITY_NAME_SPACELESS_UPPER%
 - %ENTITY_NAME_SPACELESS_LOWER%
+
+These are the special words replaced by the transformer inside the variables block (between %VARIABLES_BEGIN% and %VARIABLES_END%):
+- %VARIABLE_TYPE%
+- %VARIABLE_NAME%
+- %VARIABLE_NAME_PASCAL%
+- %VARIABLE_NAME_CAMEL%
+- %VARIABLE_NAME_SNAKE%
+- %VARIABLE_NAME_SNAKE_UPPER%
+- %VARIABLE_NAME_SNAKE_LOWER%
+- %VARIABLE_NAME_KEBAB%
+- %VARIABLE_NAME_KEBAB_UPPER%
+- %VARIABLE_NAME_KEBAB_LOWER%

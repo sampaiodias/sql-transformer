@@ -32,7 +32,7 @@ export class TransformConfigComponent implements OnInit {
       this.parser = this.getParser();
       console.log(
         this.parser.transform(
-          'package org.test;\n\n@Entity\n@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")\npublic class %ENTITY_NAME_PASCAL% {\n%VARIABLES_BEGIN%   @Column(name="%VARIABLE_NAME%")\n   private %VARIABLE_TYPE% %VARIABLE_NAME%;%VARIABLES_END%\n}\n'
+          'package org.test;\n\n@Entity\n@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")\npublic class %ENTITY_NAME_PASCAL% {\n%VARIABLES_BEGIN%   @Column(name="%VARIABLE_NAME%")\n   private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;%VARIABLES_END%\n}\n'
         )
       );
     } catch (error) {

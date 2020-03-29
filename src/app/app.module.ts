@@ -14,14 +14,10 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { TransformComponent } from './transform/transform.component';
+import { NgxFileHelpersModule } from 'ngx-file-helpers';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TransformConfigComponent,
-    TransformOutputComponent,
-    TransformComponent
-  ],
+  declarations: [AppComponent, TransformConfigComponent, TransformOutputComponent, TransformComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,7 +27,8 @@ import { TransformComponent } from './transform/transform.component';
     InputTextModule,
     ButtonModule,
     InputTextareaModule,
-    DropdownModule
+    DropdownModule,
+    NgxFileHelpersModule
   ],
   providers: [],
   bootstrap: [AppComponent]

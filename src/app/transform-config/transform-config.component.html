@@ -25,6 +25,21 @@
     ></textarea>
   </div>
   <br />
+  <div>
+    <p>Templates</p>
+    <button
+      type="button"
+      pButton
+      ngxFilePicker
+      accept="text/*"
+      multiple
+      label="Select Files"
+      (filePick)="filePick($event)"
+      (readStart)="fileReadStart($event)"
+    ></button>
+    <span style="margin-left: 10px;">Templates: {{ templatesCount }}</span>
+  </div>
+  <br />
   <div class="centralize">
     <button label="Transform!" (click)="transformButton()" pButton></button>
   </div>

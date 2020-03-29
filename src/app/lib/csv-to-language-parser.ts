@@ -74,7 +74,7 @@ export class CsvToLanguageParser {
 
     let v = '';
     for (const variable of this.variables) {
-      let newSection = variablesSection
+      const newSection = variablesSection
         .replace(/%VARIABLE_TYPE%/g, variable[1])
         .replace(/%VARIABLE_NAME%/g, variable[0])
         .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(variable[0]))
@@ -85,7 +85,6 @@ export class CsvToLanguageParser {
         .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(variable[0]))
         .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(variable[0]).toUpperCase())
         .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(variable[0]).toLowerCase());
-      newSection += '\n';
       v += newSection;
     }
 

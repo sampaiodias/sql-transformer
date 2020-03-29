@@ -4,16 +4,19 @@ SQL Transformer is an open-source web application that transforms a special CSV 
 
 ## Template Examples
 
+Here are some template examples. You can find more examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/template-examples).
+
 ### Simple POJO
 
 ```java
 package org.test;
 
-public class %CLASS_NAME% {
+public class %ENTITY_NAME_PASCAL% {
 %VARIABLES_BEGIN%
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
 %VARIABLES_END%
 }
+
 ```
 
 ### Spring Entity
@@ -23,7 +26,7 @@ package org.test;
 
 @Entity
 @Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
-public class %CLASS_NAME% {
+public class %ENTITY_NAME_PASCAL% {
     @Id
     @GeneratedValue(strategy=GenerationType=IDENTITY)
     private Long id;
@@ -32,6 +35,7 @@ public class %CLASS_NAME% {
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
 %VARIABLES_END%
 }
+
 ```
 
 

@@ -1,0 +1,7 @@
+package org.test;
+
+public class %ENTITY_NAME_PASCAL% {
+%VARIABLES_BEGIN%
+    private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
+%VARIABLES_END%
+}

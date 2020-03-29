@@ -5,6 +5,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-translator';
 import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
 import { EventEmitter } from '@angular/core';
+import { ReadFile } from 'ngx-file-helpers';
 
 @Component({
   selector: 'app-transform-config',
@@ -14,6 +15,8 @@ import { EventEmitter } from '@angular/core';
 export class TransformConfigComponent implements OnInit {
   dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
   languageOptions = [{ label: 'Java', value: ParseableLanguage.Java }];
+  templatesPicked: Array<string>;
+  templatesCount = 0;
 
   parser: CsvToLanguageParser;
   dialect: ParseableDialect;
@@ -34,11 +37,10 @@ export class TransformConfigComponent implements OnInit {
   transformButton() {
     try {
       this.parser = this.getParser();
-      this.templatesReady.emit([
-        this.parser.transform(
-          'package org.test;\n\n@Entity\n@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")\npublic class %ENTITY_NAME_PASCAL% {\n%VARIABLES_BEGIN%   @Column(name="%VARIABLE_NAME%")\n   private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;%VARIABLES_END%\n}\n'
-        )
-      ]);
+      for (let i = 0; i < this.templatesPicked.length; i++) {
+        this.templatesPicked[i] = this.parser.transform(this.templatesPicked[i]);
+      }
+      this.templatesReady.emit(this.templatesPicked);
     } catch (error) {
       console.log(error);
     }
@@ -62,5 +64,16 @@ export class TransformConfigComponent implements OnInit {
         console.error('No parser found for language ' + this.language + ' using dialect ' + this.dialect);
         return null;
     }
+  }
+
+  fileReadStart(fileCount: number) {
+    this.templatesPicked = new Array<string>();
+    this.templatesCount = fileCount;
+  }
+
+  filePick(fileData: ReadFile) {
+    let content: string = fileData.content;
+    content = content.slice(content.indexOf(',') + 1);
+    this.templatesPicked.push(atob(content));
   }
 }

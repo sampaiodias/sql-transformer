@@ -1,4 +1,4 @@
-SQLTT={"version":"1.0","fileName":"Pojo","fileExtension":"java"}
+SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%","fileExtension":"java"}
 package org.test;
 
 public class %ENTITY_NAME_PASCAL% {

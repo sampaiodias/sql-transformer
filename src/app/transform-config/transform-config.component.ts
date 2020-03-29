@@ -41,6 +41,7 @@ export class TransformConfigComponent implements OnInit {
       this.parser = this.getParser();
       for (let i = 0; i < this.templatesPicked.length; i++) {
         this.templatesPicked[i].content = this.parser.transform(this.templatesPicked[i].content);
+        this.templatesPicked[i].meta.fileName = this.parser.replaceEntityNames(this.templatesPicked[i].meta.fileName);
       }
       this.templatesReady.emit(this.templatesPicked);
     } catch (error) {

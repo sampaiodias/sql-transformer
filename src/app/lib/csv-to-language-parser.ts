@@ -49,8 +49,8 @@ export class CsvToLanguageParser {
     return transformedTemplate;
   }
 
-  private replaceEntityNames(transformedTemplate: string) {
-    transformedTemplate = transformedTemplate
+  replaceEntityNames(text: string) {
+    text = text
       .replace(/%ENTITY_NAME%/g, this.entityName)
       .replace(/%ENTITY_NAME_LOWER%/g, this.entityName.toLowerCase())
       .replace(/%ENTITY_NAME_UPPER%/g, this.entityName.toUpperCase())
@@ -63,7 +63,7 @@ export class CsvToLanguageParser {
       .replace(/%ENTITY_NAME_SPACELESS%/g, this.entityName.replace(/ /g, ''))
       .replace(/%ENTITY_NAME_SPACELESS_UPPER%/g, this.entityName.replace(/ /g, '').toUpperCase())
       .replace(/%ENTITY_NAME_SPACELESS_LOWER%/g, this.entityName.replace(/ /g, '').toLowerCase());
-    return transformedTemplate;
+    return text;
   }
 
   private generateCustomVariables(template: string): string {

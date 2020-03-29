@@ -1,9 +1,14 @@
 SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%Entity","fileExtension":"java"}
 package org.test;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.*;
+import java.util.Date;
+
 @Entity
 @Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
-public class %ENTITY_NAME_PASCAL% {
+public class %ENTITY_NAME_PASCAL% implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType=IDENTITY)
     private Long id;

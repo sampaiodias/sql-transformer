@@ -1,6 +1,9 @@
 SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%","fileExtension":"java"}
 package org.test;
 
+import java.math.*;
+import java.util.Date;
+
 public class %ENTITY_NAME_PASCAL% {
 %VARIABLES_BEGIN%
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;

@@ -4,13 +4,16 @@ SQL Transformer is an open-source web application that transforms a special CSV 
 
 ## Template Examples
 
-Here are some template examples. You can find more examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/template-examples).
+Below are some template examples. You can find more examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/template-examples).
 
 ### Simple POJO
 
 ```java
 SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%","fileExtension":"java"}
 package org.test;
+
+import java.math.*;
+import java.util.Date;
 
 public class %ENTITY_NAME_PASCAL% {
 %VARIABLES_BEGIN%
@@ -26,9 +29,14 @@ public class %ENTITY_NAME_PASCAL% {
 SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%Entity","fileExtension":"java"}
 package org.test;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.*;
+import java.util.Date;
+
 @Entity
 @Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
-public class %ENTITY_NAME_PASCAL% {
+public class %ENTITY_NAME_PASCAL% implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType=IDENTITY)
     private Long id;

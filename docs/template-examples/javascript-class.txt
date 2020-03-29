@@ -1,0 +1,6 @@
+SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_KEBAB%","fileExtension":"ts"}
+export class %ENTITY_NAME_PASCAL% {
+%VARIABLES_BEGIN%
+	%VARIABLE_NAME_CAMEL%: %VARIABLE_TYPE%;
+%VARIABLES_END%
+}

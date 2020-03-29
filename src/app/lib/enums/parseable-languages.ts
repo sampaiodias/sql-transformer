@@ -1,3 +1,4 @@
 export enum ParseableLanguage {
-  Java
+  Java,
+  JavascriptPrimitives
 }

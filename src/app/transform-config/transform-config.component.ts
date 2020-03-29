@@ -1,3 +1,4 @@
+import { PostgreToJavascriptPrimitivesTranslator } from './../lib/translators/postgre-to-javascript-primitives-translator';
 import { TemplateMeta } from './../lib/template-meta';
 import { Template } from './../lib/template';
 import { TypeTranslator } from '../lib/type-translator';
@@ -16,7 +17,10 @@ import { ReadFile } from 'ngx-file-helpers';
 })
 export class TransformConfigComponent implements OnInit {
   dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
-  languageOptions = [{ label: 'Java', value: ParseableLanguage.Java }];
+  languageOptions = [
+    { label: 'Java', value: ParseableLanguage.Java },
+    { label: 'Javascript (Primitives)', value: ParseableLanguage.JavascriptPrimitives }
+  ];
   templatesPicked: Array<Template>;
   templatesCount = 0;
 
@@ -63,6 +67,8 @@ export class TransformConfigComponent implements OnInit {
     switch (this.language) {
       case ParseableLanguage.Java:
         return new PostgreToJavaTranslator();
+      case ParseableLanguage.JavascriptPrimitives:
+        return new PostgreToJavascriptPrimitivesTranslator();
       default:
         console.error('No parser found for language ' + this.language + ' using dialect ' + this.dialect);
         return null;

@@ -1,3 +1,5 @@
+import { TemplateMeta } from './../lib/template-meta';
+import { Template } from './../lib/template';
 import { TypeTranslator } from '../lib/type-translator';
 import { ParseableLanguage } from '../lib/enums/parseable-languages';
 import { ParseableDialect } from '../lib/enums/parseable-dialect';
@@ -15,7 +17,7 @@ import { ReadFile } from 'ngx-file-helpers';
 export class TransformConfigComponent implements OnInit {
   dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
   languageOptions = [{ label: 'Java', value: ParseableLanguage.Java }];
-  templatesPicked: Array<string>;
+  templatesPicked: Array<Template>;
   templatesCount = 0;
 
   parser: CsvToLanguageParser;
@@ -25,7 +27,7 @@ export class TransformConfigComponent implements OnInit {
   script = 'id,integer\nname,varchar(255)\nprice,numeric';
 
   @Output()
-  templatesReady: EventEmitter<Array<string>> = new EventEmitter<Array<string>>();
+  templatesReady: EventEmitter<Array<Template>> = new EventEmitter<Array<Template>>();
 
   constructor() {}
 
@@ -38,7 +40,7 @@ export class TransformConfigComponent implements OnInit {
     try {
       this.parser = this.getParser();
       for (let i = 0; i < this.templatesPicked.length; i++) {
-        this.templatesPicked[i] = this.parser.transform(this.templatesPicked[i]);
+        this.templatesPicked[i].content = this.parser.transform(this.templatesPicked[i].content);
       }
       this.templatesReady.emit(this.templatesPicked);
     } catch (error) {
@@ -67,13 +69,28 @@ export class TransformConfigComponent implements OnInit {
   }
 
   fileReadStart(fileCount: number) {
-    this.templatesPicked = new Array<string>();
+    this.templatesPicked = new Array<Template>();
     this.templatesCount = fileCount;
   }
 
   filePick(fileData: ReadFile) {
     let content: string = fileData.content;
-    content = content.slice(content.indexOf(',') + 1);
-    this.templatesPicked.push(atob(content));
+    content = atob(content.slice(content.indexOf(',') + 1));
+
+    if (!this.isTemplateFile(content)) {
+      console.error('Selected file is not a valid SQL Transformer Template.');
+      return;
+    }
+
+    const meta: TemplateMeta = JSON.parse(content.slice(6, content.indexOf('\n') + 1));
+    content = content.substring(content.indexOf('\n') + 1);
+
+    const template = new Template(content, meta);
+
+    this.templatesPicked.push(template);
+  }
+
+  private isTemplateFile(fileContent: string) {
+    return fileContent.startsWith('SQLTT=');
   }
 }

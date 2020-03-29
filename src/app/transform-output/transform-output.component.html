@@ -1,5 +1,6 @@
 <p-panel header="Transform Output">
   <div *ngFor="let template of templates">
-    <textarea pInputTextarea style="width: 100%; resize: vertical;" autoResize="true" [(ngModel)]="template"></textarea>
+    <p>{{ template.meta.fileName }}.{{ template.meta.fileExtension }}</p>
+    <textarea pInputTextarea style="width: 100%; resize: vertical;" autoResize="true" [(ngModel)]="template.content"></textarea>
   </div>
 </p-panel>

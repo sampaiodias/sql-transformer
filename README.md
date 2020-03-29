@@ -9,6 +9,7 @@ Here are some template examples. You can find more examples [here](https://githu
 ### Simple POJO
 
 ```java
+SQLTT={"version":"1.0","fileName":"Pojo","fileExtension":"java"}
 package org.test;
 
 public class %ENTITY_NAME_PASCAL% {
@@ -22,6 +23,7 @@ public class %ENTITY_NAME_PASCAL% {
 ### Spring Entity
 
 ```java
+SQLTT={"version":"1.0","fileName":"SpringEntity","fileExtension":"java"}
 package org.test;
 
 @Entity

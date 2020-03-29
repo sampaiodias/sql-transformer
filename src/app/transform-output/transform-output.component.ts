@@ -1,3 +1,4 @@
+import { Template } from './../lib/template';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,13 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./transform-output.component.scss']
 })
 export class TransformOutputComponent implements OnInit {
-  templates: Array<string>;
+  templates: Array<Template>;
 
   constructor() {}
 
   ngOnInit() {}
 
-  printOutput(templates: Array<string>) {
+  printOutput(templates: Array<Template>) {
     this.templates = templates;
   }
 }

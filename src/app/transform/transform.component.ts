@@ -1,3 +1,4 @@
+import { Template } from './../lib/template';
 import { TransformOutputComponent } from './../transform-output/transform-output.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
@@ -13,7 +14,7 @@ export class TransformComponent implements OnInit {
 
   ngOnInit() {}
 
-  templatesReady(templates: Array<string>) {
+  templatesReady(templates: Array<Template>) {
     this.output.printOutput(templates);
   }
 }

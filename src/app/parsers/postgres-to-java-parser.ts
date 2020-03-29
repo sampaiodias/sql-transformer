@@ -1,41 +1,50 @@
 import { CsvToLanguageParser } from './csv-to-language-parser';
 
-export class PostgresToJavaParser implements CsvToLanguageParser {
-  dataTypes = new Map<string, string>([
-    ['CHARACTER', 'String'],
-    ['VARCHAR', 'String'],
-    ['LONGVARCHAR', 'String'],
-    ['NUMERIC', 'BigDecimal'],
-    ['DECIMAL', 'BigDecimal'],
-    ['BIT', 'Boolean'],
-    ['TINYINT', 'Integer'],
-    ['SMALLINT', 'Integer'],
-    ['INTEGER', 'Integer'],
-    ['BIGINT', 'Long'],
-    ['REAL', 'Float'],
-    ['FLOAT', 'Double'],
-    ['DOUBLE PRECISION', 'Double'],
-    ['BINARY', 'byte[]'],
-    ['VARBINARY', 'byte[]'],
-    ['LONGVARBINARY', 'byte[]'],
-    ['DATE', 'Date'],
-    ['TIME', 'Date'],
-    ['TIMESTAMP', 'Timestamp']
-  ]);
+export class PostgresToJavaParser extends CsvToLanguageParser {
+  entityName: string;
 
-  parse(csv: string): Map<string, string> {
-    const map = new Map<string, string>();
-    const data = csv
-      .replace('(', '')
-      .replace(')', '')
-      .replace(new RegExp('[0-9]', 'g'), '')
-      .replace(new RegExp('\r?\n', 'g'), ',')
-      .split(',');
+  constructor(csv: string, entityName: string) {
+    super(csv);
+    this.entityName = entityName;
+  }
 
-    for (let i = 0; i < data.length; i += 2) {
-      map.set(data[i], this.dataTypes.get(data[i + 1].toUpperCase()));
+  transform(template: string): string {
+    throw new Error('Method not implemented.');
+  }
+
+  translateType(type: string): string {
+    switch (type) {
+      case 'CHARACTER':
+      case 'VARCHAR':
+      case 'LONGVARCHAR':
+        return 'String';
+      case 'NUMERIC':
+      case 'DECIMAL':
+        return 'BigDecimal';
+      case 'BIT':
+        return 'Boolean';
+      case 'TINYINT':
+      case 'SMALLINT':
+      case 'INTEGER':
+        return 'Integer';
+      case 'BIGINT':
+        return 'Long';
+      case 'REAL':
+        return 'Float';
+      case 'DOUBLE PRECISION':
+      case 'FLOAT':
+        return 'Double';
+      case 'BINARY':
+      case 'VARBINARY':
+      case 'LONGVARBINARY':
+        return 'byte[]';
+      case 'DATE':
+      case 'TIME':
+        return 'Date';
+      case 'TIMESTAMP':
+        return 'Timestamp';
+      default:
+        return type;
     }
-
-    return map;
   }
 }

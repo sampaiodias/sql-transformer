@@ -18,7 +18,7 @@ export class TransformConfigComponent implements OnInit {
   parser: CsvToLanguageParser;
   dialect: ParseableDialect;
   language: ParseableLanguage;
-  entityName = 'Product';
+  entityName = 'Favorite Product';
   script = 'id,integer\nname,varchar(255)\nprice,numeric';
 
   constructor() {}
@@ -29,40 +29,36 @@ export class TransformConfigComponent implements OnInit {
   }
 
   transformButton() {
-    this.initializeParser();
-
     try {
-      const map = this.parser.variables;
-      console.log(map);
+      this.parser = this.getParser();
+      console.log(this.parser);
     } catch (error) {
       console.log(error);
     }
   }
 
-  private initializeParser() {
+  private getParser(): CsvToLanguageParser {
     switch (this.dialect) {
       case ParseableDialect.PostgreSQL:
-        this.initializePostgresParser();
-        break;
+        return this.getPostgresParser();
       default:
         console.error('No parser found for dialect ' + this.dialect);
-        this.parser = null;
+        return null;
     }
   }
 
-  private initializePostgresParser() {
+  private getPostgresParser(): CsvToLanguageParser {
     switch (this.language) {
       case ParseableLanguage.Java:
-        this.parser = new PostgresToJavaParser(this.script, this.entityName);
-        break;
+        return new PostgresToJavaParser(this.script, this.entityName);
       default:
         console.error(
           'No parser found for language ' +
-            this.dialect +
+            this.language +
             ' using dialect ' +
             this.dialect
         );
-        this.parser = null;
+        return null;
     }
   }
 }

@@ -1,11 +1,16 @@
 import { TypeTranslator } from './type-translator';
 
 export class CsvToLanguageParser {
-  entityName: string;
   variables: Map<string, string>;
 
+  entityName: string;
+  pascalName: string;
+  camelName: string;
+  snakeName: string;
+  kebabName: string;
+
   constructor(csv: string, entityName: string, translator: TypeTranslator) {
-    this.entityName = entityName;
+    this.initializeNames(entityName);
     this.variables = translator.typeMap();
 
     const map = new Map<string, string>();
@@ -23,6 +28,35 @@ export class CsvToLanguageParser {
     this.variables = map;
   }
 
+  private initializeNames(entityName: string) {
+    this.entityName = entityName;
+    this.pascalName = this.entityName
+      .replace(
+        /\w\S*/g,
+        m => m.charAt(0).toUpperCase() + m.substr(1).toLowerCase()
+      )
+      .replace(/ /g, '');
+    this.camelName = this.entityName
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    this.kebabName =
+      this.entityName &&
+      this.entityName
+        .match(
+          /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
+        )
+        .map(x => x.toLowerCase())
+        .join('-');
+    this.snakeName =
+      this.entityName &&
+      this.entityName
+        .match(
+          /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
+        )
+        .map(x => x.toLowerCase())
+        .join('_');
+  }
+
   transform(template: string): string {
     let transformedTemplate = template;
 
@@ -31,15 +65,6 @@ export class CsvToLanguageParser {
     }
 
     transformedTemplate = transformedTemplate
-      .replace(new RegExp(/%CLASS_NAME%/g), this.generateClassName())
-      .replace(
-        new RegExp(/%CLASS_NAME_LOWER%/g),
-        this.generateClassName().toLowerCase()
-      )
-      .replace(
-        new RegExp(/%CLASS_NAME_UPPER%/g),
-        this.generateClassName().toUpperCase()
-      )
       .replace(new RegExp(/%ENTITY_NAME%/g), this.entityName)
       .replace(
         new RegExp(/%ENTITY_NAME_LOWER%/g),
@@ -49,45 +74,32 @@ export class CsvToLanguageParser {
         new RegExp(/%ENTITY_NAME_UPPER%/g),
         this.entityName.toUpperCase()
       )
-      .replace(
-        new RegExp(/%ENTITY_NAME_SNAKE%/g),
-        this.entityName.replace(new RegExp(/ /g), '_').toLowerCase()
-      )
+      .replace(new RegExp(/%ENTITY_NAME_SNAKE%/g), this.snakeName)
       .replace(
         new RegExp(/%ENTITY_NAME_SNAKE_UPPER%/g),
-        this.entityName.replace(new RegExp(/ /g), '_').toUpperCase()
+        this.snakeName.toUpperCase()
       )
-      .replace(
-        new RegExp(/%ENTITY_NAME_UPPER_SNAKE%/g),
-        this.entityName.replace(new RegExp(/ /g), '_').toUpperCase()
-      )
-      .replace(
-        new RegExp(/%ENTITY_NAME_KEBAB%/g),
-        this.entityName.replace(new RegExp(/ /g), '-').toLowerCase()
-      )
+      .replace(new RegExp(/%ENTITY_NAME_KEBAB%/g), this.kebabName)
       .replace(
         new RegExp(/%ENTITY_NAME_KEBAB_UPPER%/g),
-        this.entityName.replace(new RegExp(/ /g), '-').toUpperCase()
+        this.kebabName.toUpperCase()
+      )
+      .replace(new RegExp(/%ENTITY_NAME_CAMEL%/g), this.camelName)
+      .replace(new RegExp(/%ENTITY_NAME_PASCAL%/g), this.pascalName)
+      .replace(
+        new RegExp(/%ENTITY_NAME_SPACELESS%/g),
+        this.entityName.replace(/ /g, '')
       )
       .replace(
-        new RegExp(/%ENTITY_NAME_UPPER_KEBAB%/g),
-        this.entityName.replace(new RegExp(/ /g), '-').toUpperCase()
+        new RegExp(/%ENTITY_NAME_SPACELESS_UPPER%/g),
+        this.entityName.replace(/ /g, '').toUpperCase()
       )
-      .replace(new RegExp(/%VARIABLES%/g), this.generateVariables());
+      .replace(
+        new RegExp(/%ENTITY_NAME_SPACELESS_LOWER%/g),
+        this.entityName.replace(/ /g, '').toLowerCase()
+      );
 
     return transformedTemplate;
-  }
-
-  private generateClassName(): string {
-    return this.entityName.replace(new RegExp(/ /g), '');
-  }
-
-  private generateVariables(): string {
-    let v = '';
-    for (const variable of this.variables) {
-      v += `  private ${variable[1]} ${variable[0]};\n`;
-    }
-    return v;
   }
 
   private generateCustomVariables(template: string): string {

@@ -1,27 +1,56 @@
-# SqlTransformer
+# SQL Transformer
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
+SQL Transformer is an open-source web application that transforms a special CSV (that contains the variables of a SQL table) into other programming files (like classes) using custom templates.
 
-## Development server
+## Template Examples
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Simple POJO
 
-## Code scaffolding
+```java
+package org.test;
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+public class %CLASS_NAME% {
+%VARIABLES%
+}
+```
 
-## Build
+### Spring Entity
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```java
+package org.test;
 
-## Running unit tests
+@Entity
+@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
+public class %CLASS_NAME% {
+    @Id
+    @GeneratedValue(strategy=GenerationType=IDENTITY)
+    private Long id;
+%VARIABLES_BEGIN%
+    @Column(name="%VARIABLE_NAME%")
+    private %VARIABLE_TYPE% %VARIABLE_NAME%;
+%VARIABLES_END%
+}
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Template Dictionary
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+These are the special words replaced by the transformer:
 
-## Further help
+- %VARIABLES%
+- %VARIABLES_BEGIN%
+- %VARIABLES_END%
+- %VARIABLE_NAME%
+- %VARIABLE_TYPE%
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- %CLASS_NAME%
+- %CLASS_NAME_UPPER%
+- %CLASS_NAME_LOWER%
+
+- %ENTITY_NAME%
+- %ENTITY_NAME_LOWER%
+- %ENTITY_NAME_UPPER%
+- %ENTITY_NAME_SNAKE%
+- %ENTITY_NAME_SNAKE_UPPER%
+- %ENTITY_NAME_KEBAB%
+- %ENTITY_NAME_KEBAB_UPPER%

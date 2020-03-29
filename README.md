@@ -2,6 +2,21 @@
 
 SQL Transformer is an open-source web application that transforms a special CSV that contains the variables of a SQL table into other programming files (like classes and interfaces) using custom templates.
 
+App available at: https://sql-transformer.firebaseapp.com/
+
+## Transformation Support
+
+Theses are the dialects and languages that SQL Transformer currently supports:
+
+### SQL Dialects
+
+- PostgreSQL
+
+### Target Languages
+
+- Java
+- Javascript (using Primitives)
+
 ## Template Examples
 
 Below are some template examples. You can find more examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/template-examples).

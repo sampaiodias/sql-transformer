@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
 public class %ENTITY_NAME_PASCAL% implements Serializable {
     @Id
-    @GeneratedValue(strategy=GenerationType=IDENTITY)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 %VARIABLES_BEGIN%
     @Column(name="%VARIABLE_NAME%")

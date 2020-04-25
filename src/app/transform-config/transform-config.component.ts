@@ -9,17 +9,18 @@ import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-tran
 import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
 import { EventEmitter } from '@angular/core';
 import { ReadFile } from 'ngx-file-helpers';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-transform-config',
   templateUrl: './transform-config.component.html',
-  styleUrls: ['./transform-config.component.scss']
+  styleUrls: ['./transform-config.component.scss'],
 })
 export class TransformConfigComponent implements OnInit {
   dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
   languageOptions = [
     { label: 'Java', value: ParseableLanguage.Java },
-    { label: 'Javascript (Primitives)', value: ParseableLanguage.JavascriptPrimitives }
+    { label: 'Javascript (Primitives)', value: ParseableLanguage.JavascriptPrimitives },
   ];
   templatesPicked: Array<Template>;
   templatesCount = 0;
@@ -33,7 +34,7 @@ export class TransformConfigComponent implements OnInit {
   @Output()
   templatesReady: EventEmitter<Array<Template>> = new EventEmitter<Array<Template>>();
 
-  constructor() {}
+  constructor(private messageService: MessageService) {}
 
   ngOnInit() {
     this.dialect = this.dialectOptions[0].value;
@@ -41,6 +42,10 @@ export class TransformConfigComponent implements OnInit {
   }
 
   transformButton() {
+    if (this.templatesCount === 0) {
+      this.toast('No templates selected!', 'Please, select one or more template files to proceed', 'warn');
+      return;
+    }
     try {
       this.parser = this.getParser();
       for (let i = 0; i < this.templatesPicked.length; i++) {
@@ -49,6 +54,7 @@ export class TransformConfigComponent implements OnInit {
       }
       this.templatesReady.emit(this.templatesPicked);
     } catch (error) {
+      this.toast('Unknown Parse Error!', 'Check the console for more information');
       console.log(error);
     }
   }
@@ -58,7 +64,7 @@ export class TransformConfigComponent implements OnInit {
       case ParseableDialect.PostgreSQL:
         return new CsvToLanguageParser(this.script, this.entityName, this.getTranslator());
       default:
-        console.error('No parser found for dialect ' + this.dialect);
+        this.toast('Unsupported operation!', 'No parser found for dialect ' + this.dialect);
         return null;
     }
   }
@@ -70,7 +76,7 @@ export class TransformConfigComponent implements OnInit {
       case ParseableLanguage.JavascriptPrimitives:
         return new PostgreToJavascriptPrimitivesTranslator();
       default:
-        console.error('No parser found for language ' + this.language + ' using dialect ' + this.dialect);
+        this.toast('Unsupported operation!', 'No parser found for language ' + this.language + ' using dialect ' + this.dialect);
         return null;
     }
   }
@@ -85,7 +91,7 @@ export class TransformConfigComponent implements OnInit {
     content = atob(content.slice(content.indexOf(',') + 1));
 
     if (!this.isTemplateFile(content)) {
-      console.error('Selected file is not a valid SQL Transformer Template.');
+      this.toast('Parse Error!', 'Selected file is not a valid SQL Transformer Template.');
       return;
     }
 
@@ -99,5 +105,9 @@ export class TransformConfigComponent implements OnInit {
 
   private isTemplateFile(fileContent: string) {
     return fileContent.startsWith('SQLTT=');
+  }
+
+  private toast(title: string, subtitle: string, type: string = 'error', duration: number = 10000) {
+    this.messageService.add({ severity: type, summary: title, detail: subtitle, life: duration });
   }
 }

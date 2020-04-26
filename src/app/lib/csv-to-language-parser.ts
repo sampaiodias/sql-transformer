@@ -33,7 +33,6 @@ export class CsvToLanguageParser {
         varData.columnName = data[i + 1];
         varData.sqlDataType = this.translateType(data[i + 2].toUpperCase());
         varData.relationship = this.translateRelationship(data[i + 3]);
-        console.log(varData);
         this.variablesData.set(data[i], varData);
       }
     }
@@ -81,33 +80,83 @@ export class CsvToLanguageParser {
       template.search('%VARIABLES_BEGIN%') + '%VARIABLES_BEGIN%'.length,
       template.search('%VARIABLES_END%')
     );
+    const primaryKeySection = variablesSection.slice(
+      variablesSection.search('%PRIMARY_KEY_BEGIN%') + '%PRIMARY_KEY_BEGIN%'.length,
+      variablesSection.search('%PRIMARY_KEY_END%')
+    );
+    const columnSection = variablesSection.slice(
+      variablesSection.search('%COLUMN_BEGIN%') + '%COLUMN_BEGIN%'.length,
+      variablesSection.search('%COLUMN_END%')
+    );
+    const oneToOneSection = variablesSection.slice(
+      variablesSection.search('%ONE_TO_ONE_BEGIN%') + '%ONE_TO_ONE_BEGIN%'.length,
+      variablesSection.search('%ONE_TO_ONE_END%')
+    );
+    const oneToManySection = variablesSection.slice(
+      variablesSection.search('%ONE_TO_MANY_BEGIN%') + '%ONE_TO_MANY_BEGIN%'.length,
+      variablesSection.search('%ONE_TO_MANY_END%')
+    );
+    const manyToOneSection = variablesSection.slice(
+      variablesSection.search('%MANY_TO_ONE_BEGIN%') + '%MANY_TO_ONE_BEGIN%'.length,
+      variablesSection.search('%MANY_TO_ONE_END%')
+    );
+    const manyToManySection = variablesSection.slice(
+      variablesSection.search('%MANY_TO_MANY_BEGIN%') + '%MANY_TO_MANY_BEGIN%'.length,
+      variablesSection.search('%MANY_TO_MANY_END%')
+    );
 
     let v = '';
     for (const data of this.variablesData.values()) {
-      const newSection = variablesSection
-        .replace(/%VARIABLE_TYPE%/g, data.sqlDataType)
-        .replace(/%VARIABLE_NAME%/g, data.name)
-        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(data.name))
-        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(data.name))
-        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(data.name))
-        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(data.name).toUpperCase())
-        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(data.name).toLowerCase())
-        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(data.name))
-        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(data.name).toUpperCase())
-        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(data.name).toLowerCase())
-        .replace(/%VARIABLE_COLUMN%/g, data.columnName)
-        .replace(/%VARIABLE_COLUMN_PASCAL%/g, toPascal(data.columnName))
-        .replace(/%VARIABLE_COLUMN_CAMEL%/g, toCamel(data.columnName))
-        .replace(/%VARIABLE_COLUMN_SNAKE%/g, toSnake(data.columnName))
-        .replace(/%VARIABLE_COLUMN_SNAKE_UPPER%/g, toSnake(data.columnName).toUpperCase())
-        .replace(/%VARIABLE_COLUMN_SNAKE_LOWER%/g, toSnake(data.columnName).toLowerCase())
-        .replace(/%VARIABLE_COLUMN_KEBAB%/g, toKebab(data.columnName))
-        .replace(/%VARIABLE_COLUMN_KEBAB_UPPER%/g, toKebab(data.columnName).toUpperCase())
-        .replace(/%VARIABLE_COLUMN_KEBAB_LOWER%/g, toKebab(data.columnName).toLowerCase());
+      let section: string;
+      switch (data.relationship) {
+        case SqlRelationship.PrimaryKey:
+          section = primaryKeySection;
+          break;
+        default:
+        case SqlRelationship.Column:
+          section = columnSection;
+          break;
+        case SqlRelationship.OneToOne:
+          section = oneToOneSection;
+          break;
+        case SqlRelationship.OneToMany:
+          section = oneToManySection;
+          break;
+        case SqlRelationship.ManyToOne:
+          section = manyToOneSection;
+          break;
+        case SqlRelationship.ManyToMany:
+          section = manyToManySection;
+          break;
+      }
+      const newSection = this.replaceVariableNames(section, data);
       v += newSection;
     }
 
     return template.replace('%VARIABLES_BEGIN%' + variablesSection + '%VARIABLES_END%', v);
+  }
+
+  private replaceVariableNames(variablesSection: string, data: VariableData) {
+    return variablesSection
+      .replace(/%VARIABLE_TYPE%/g, data.sqlDataType)
+      .replace(/%VARIABLE_NAME%/g, data.name)
+      .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(data.name))
+      .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(data.name))
+      .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(data.name))
+      .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(data.name).toUpperCase())
+      .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(data.name).toLowerCase())
+      .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(data.name))
+      .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(data.name).toUpperCase())
+      .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(data.name).toLowerCase())
+      .replace(/%VARIABLE_COLUMN%/g, data.columnName)
+      .replace(/%VARIABLE_COLUMN_PASCAL%/g, toPascal(data.columnName))
+      .replace(/%VARIABLE_COLUMN_CAMEL%/g, toCamel(data.columnName))
+      .replace(/%VARIABLE_COLUMN_SNAKE%/g, toSnake(data.columnName))
+      .replace(/%VARIABLE_COLUMN_SNAKE_UPPER%/g, toSnake(data.columnName).toUpperCase())
+      .replace(/%VARIABLE_COLUMN_SNAKE_LOWER%/g, toSnake(data.columnName).toLowerCase())
+      .replace(/%VARIABLE_COLUMN_KEBAB%/g, toKebab(data.columnName))
+      .replace(/%VARIABLE_COLUMN_KEBAB_UPPER%/g, toKebab(data.columnName).toUpperCase())
+      .replace(/%VARIABLE_COLUMN_KEBAB_LOWER%/g, toKebab(data.columnName).toLowerCase());
   }
 
   private translateType(type: string) {

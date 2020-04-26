@@ -1,28 +1,17 @@
 <p-panel header="Transform Settings">
   <div style="margin: 5px 0;">
-    <p>Entity Name</p>
+    <p class="required">Entity Name</p>
     <input placeholder="Example: Shopping Cart" style="width: 100%;" type="text" pInputText [(ngModel)]="entityName" />
   </div>
   <br />
   <div>
-    <p>Variables (CSV)</p>
-    <textarea
-      pInputTextarea
-      placeholder=""
-      style="width: 100%; resize: vertical; max-height: 500px; min-height: 200px;"
-      autoResize="true"
-      [(ngModel)]="script"
-    ></textarea>
-  </div>
-  <br />
-  <div>
-    <p>Type Dictionary</p>
-    <button type="button" pButton ngxFilePicker accept="*json" label="Select Files" (filePick)="dictionaryFilePick($event)"></button>
+    <p class="required">Type Dictionary</p>
+    <button type="button" pButton ngxFilePicker accept="*json" label="Select File" (filePick)="dictionaryFilePick($event)"></button>
     <span style="margin-left: 10px;">File: {{ typeDictionaryFileName }}</span>
   </div>
   <br />
   <div>
-    <p>Templates</p>
+    <p class="required">Templates</p>
     <button
       type="button"
       pButton
@@ -36,7 +25,18 @@
     <span style="margin-left: 10px;">Templates: {{ templatesCount }}</span>
   </div>
   <br />
+  <div>
+    <p>Variables (CSV)</p>
+    <textarea
+      pInputTextarea
+      placeholder=""
+      style="width: 100%; resize: vertical; max-height: 500px; min-height: 200px;"
+      autoResize="true"
+      [(ngModel)]="script"
+    ></textarea>
+  </div>
+  <br />
   <div class="centralize">
-    <button label="Transform!" (click)="transformButton()" pButton></button>
+    <button label="Transform!" (click)="transformButton()" pButton [disabled]="buttonTransformIsDisabled()"></button>
   </div>
 </p-panel>

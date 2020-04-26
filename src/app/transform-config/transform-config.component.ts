@@ -96,6 +96,10 @@ export class TransformConfigComponent implements OnInit {
     this.templatesPicked.push(template);
   }
 
+  buttonTransformIsDisabled() {
+    return !this.entityName || this.typeTranslator == null || !this.templatesCount;
+  }
+
   private isTemplateFile(fileContent: string) {
     return fileContent.startsWith('SQLTT=');
   }

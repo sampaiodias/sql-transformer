@@ -3,8 +3,6 @@ import { PostgreToJavascriptPrimitivesTranslator } from './../lib/translators/po
 import { TemplateMeta } from './../lib/template-meta';
 import { Template } from './../lib/template';
 import { TypeTranslator } from '../lib/type-translator';
-import { ParseableLanguage } from '../lib/enums/parseable-languages';
-import { ParseableDialect } from '../lib/enums/parseable-dialect';
 import { Component, OnInit, Output } from '@angular/core';
 import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-translator';
 import { CsvToLanguageParser } from '../lib/csv-to-language-parser';

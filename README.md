@@ -4,20 +4,15 @@ SQL Transformer is an open-source web application that transforms a special CSV 
 
 App available at: https://sql-transformer.firebaseapp.com/
 
-## Transformation Support
+## Type Dictionaries
 
-Theses are the dialects and languages that SQL Transformer currently supports:
+A Type Dictionaries is a Json file that defines the data types that will be used for the transformation, matching a SQL data type to a data type of the desired programming language.
 
-### SQL Dialects
+You can find type dictionary examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/dictionary-examples).
 
-- PostgreSQL
+## Templates
 
-### Target Languages
-
-- Java
-- Javascript (using Primitives)
-
-## Template Examples
+Templates are the files that define what you are trying to create with SQL Transformer. Their structure is fairly easy to understand and it is made to be flexible.
 
 Below are some template examples. You can find more examples [here](https://github.com/sampaiodias/sql-transformer/tree/master/docs/template-examples).
 
@@ -64,7 +59,7 @@ public class %ENTITY_NAME_PASCAL% implements Serializable {
 ```
 
 
-## Template Dictionary
+## Template Keywords
 
 These are the special words replaced by the transformer anywhere:
 
@@ -82,6 +77,7 @@ These are the special words replaced by the transformer anywhere:
 - %ENTITY_NAME_SPACELESS_LOWER%
 
 These are the special words replaced by the transformer inside the variables block (between %VARIABLES_BEGIN% and %VARIABLES_END%):
+
 - %VARIABLE_TYPE%
 - %VARIABLE_NAME%
 - %VARIABLE_NAME_PASCAL%

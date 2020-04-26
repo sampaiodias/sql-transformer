@@ -1,4 +1,4 @@
-SQLTT={"version":"1.0","fileName":"%ENTITY_NAME_PASCAL%Entity","fileExtension":"java"}
+SQLTT={"version":"2.0","fileName":"%ENTITY_NAME_PASCAL%Entity","fileExtension":"java"}
 package org.test;
 
 import javax.persistence.*;
@@ -7,13 +7,37 @@ import java.math.*;
 import java.util.Date;
 
 @Entity
-@Table(name="tb_%ENTITY_NAME_SNAKE%", schema="my_schema")
+@Table(name = "tb_%ENTITY_NAME_SNAKE%", schema = "my_schema")
 public class %ENTITY_NAME_PASCAL% implements Serializable {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
 %VARIABLES_BEGIN%
-    @Column(name="%VARIABLE_NAME%")
+%PRIMARY_KEY_BEGIN%
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+%PRIMARY_KEY_END%
+%COLUMN_BEGIN%
+    @Column(name = "%VARIABLE_COLUMN%")
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
+%COLUMN_END%
+%ONE_TO_ONE_BEGIN%
+    @OneToOne
+    @JoinColumn(name = "%VARIABLE_COLUMN%")
+    private %VARIABLE_NAME_PASCAL% %VARIABLE_NAME_CAMEL%;
+%ONE_TO_ONE_END%
+%ONE_TO_MANY_BEGIN%
+    @OneToMany
+    @JoinColumn(name = "%VARIABLE_COLUMN%")
+    private List<%VARIABLE_NAME_PASCAL%> %VARIABLE_NAME_CAMEL%;
+%ONE_TO_MANY_END%
+%MANY_TO_ONE_BEGIN%
+    @ManyToOne
+    @JoinColumn(name = "%VARIABLE_COLUMN%")
+    private %VARIABLE_NAME_PASCAL% %VARIABLE_NAME_CAMEL%;
+%MANY_TO_ONE_END%
+%MANY_TO_MANY_BEGIN%
+    @ManyToMany
+    @JoinColumn(name = "%VARIABLE_COLUMN%")
+    private List<%VARIABLE_NAME_PASCAL%> %VARIABLE_NAME_CAMEL%;
+%MANY_TO_MANY_END%
 %VARIABLES_END%
 }

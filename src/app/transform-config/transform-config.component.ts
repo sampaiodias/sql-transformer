@@ -48,6 +48,8 @@ export class TransformConfigComponent implements OnInit {
         templates[i] = new Template();
         templates[i].content = this.parser.transform(this.templatesPicked[i].content);
         templates[i].meta.fileName = this.parser.replaceEntityNames(this.templatesPicked[i].meta.fileName);
+        templates[i].meta.fileExtension = this.templatesPicked[i].meta.fileExtension;
+        templates[i].meta.version = this.templatesPicked[i].meta.version;
       }
       this.templatesReady.emit(templates);
       this.toast('Transform successful!', '', 'success', 3000);

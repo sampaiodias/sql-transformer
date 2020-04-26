@@ -26,7 +26,14 @@
   </div>
   <br />
   <div>
-    <p>Variables (CSV)</p>
+    <p style="padding-top: 6px; float: left;">Variables (CSV)</p>
+    <button
+      pButton
+      style="float: right !important; width: 25px !important; height: 25px !important; margin: 5px;"
+      (click)="buttonAddLine()"
+    >
+      <i class="pi pi-plus" style="margin-top: 3px;"></i>
+    </button>
     <textarea
       pInputTextarea
       placeholder=""
@@ -40,3 +47,32 @@
     <button label="Transform!" (click)="transformButton()" pButton [disabled]="buttonTransformIsDisabled()"></button>
   </div>
 </p-panel>
+
+<p-dialog
+  header="Add Line"
+  [(visible)]="showAddLine"
+  [modal]="true"
+  [style]="{ width: '30vw' }"
+  [contentStyle]="{ overflow: 'visible' }"
+  [dismissableMask]="true"
+>
+  <p>Column Name</p>
+  <div>
+    <input pInputText style="width: 100%;" [(ngModel)]="columnName" />
+  </div>
+  <br />
+  <p>SQL Data Type</p>
+  <p-autoComplete
+    [(ngModel)]="sqlTypeSelected"
+    [suggestions]="sqlTypeFilteredOptions"
+    (completeMethod)="searchSqlTypes($event)"
+    [style]="{ width: '100%' }"
+    [inputStyle]="{ width: '100%' }"
+    styleClass="p-autocomplete"
+    baseZIndex="10000"
+  ></p-autoComplete>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" (click)="buttonAddLineConfirm()" label="Add"></button>
+    <button type="button" pButton icon="pi pi-times" (click)="buttonAddLineCancel()" label="Cancel" class="ui-button-secondary"></button>
+  </p-footer>
+</p-dialog>

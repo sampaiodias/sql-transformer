@@ -17,6 +17,9 @@ import { TransformComponent } from './transform/transform.component';
 import { NgxFileHelpersModule } from 'ngx-file-helpers';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [AppComponent, TransformConfigComponent, TransformOutputComponent, TransformComponent],
@@ -32,6 +35,9 @@ import { MessageService } from 'primeng/api';
     DropdownModule,
     NgxFileHelpersModule,
     ToastModule,
+    DialogModule,
+    TooltipModule,
+    AutoCompleteModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

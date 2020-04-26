@@ -1,10 +1,8 @@
 import { JsonDictionaryTranslator } from './../lib/translators/json-dictionary-translator';
-import { PostgreToJavascriptPrimitivesTranslator } from './../lib/translators/postgre-to-javascript-primitives-translator';
 import { TemplateMeta } from './../lib/template-meta';
 import { Template } from './../lib/template';
 import { TypeTranslator } from '../lib/type-translator';
 import { Component, OnInit, Output } from '@angular/core';
-import { PostgreToJavaTranslator } from '../lib/translators/postgre-to-java-translator';
 import { CsvToLanguageParser } from '../lib/csv-to-language-parser';
 import { EventEmitter } from '@angular/core';
 import { ReadFile } from 'ngx-file-helpers';
@@ -23,7 +21,13 @@ export class TransformConfigComponent implements OnInit {
 
   parser: CsvToLanguageParser;
   entityName = 'Favorite Product';
-  script = 'id,integer\nname,varchar(255)\nprice,numeric';
+  script = 'id,integer\nname,varchar\nprice,numeric';
+
+  showAddLine = false;
+  columnName = '';
+  sqlTypeSelected = '';
+  sqlTypeOptions: Array<string> = [];
+  sqlTypeFilteredOptions: Array<string> = [];
 
   @Output()
   templatesReady: EventEmitter<Array<Template>> = new EventEmitter<Array<Template>>();
@@ -69,6 +73,7 @@ export class TransformConfigComponent implements OnInit {
       content = atob(content.slice(content.indexOf(',') + 1));
       this.typeTranslator = new JsonDictionaryTranslator(content);
       this.typeDictionaryFileName = fileData.name;
+      this.sqlTypeOptions = [...this.typeTranslator.typeMap().keys()];
     } catch (error) {
       this.typeTranslator = null;
       this.typeDictionaryFileName = '';
@@ -100,6 +105,30 @@ export class TransformConfigComponent implements OnInit {
 
   buttonTransformIsDisabled() {
     return !this.entityName || this.typeTranslator == null || !this.templatesCount;
+  }
+
+  buttonAddLine() {
+    this.showAddLine = true;
+  }
+
+  buttonAddLineConfirm() {
+    this.showAddLine = false;
+    this.script += '\n' + this.columnName + ',' + this.sqlTypeSelected;
+    this.columnName = '';
+    this.sqlTypeSelected = '';
+  }
+
+  buttonAddLineCancel() {
+    this.showAddLine = false;
+  }
+
+  searchSqlTypes(event: any) {
+    this.sqlTypeFilteredOptions = [];
+    for (const t of this.sqlTypeOptions) {
+      if (t.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+        this.sqlTypeFilteredOptions.push(t.toLowerCase());
+      }
+    }
   }
 
   private isTemplateFile(fileContent: string) {

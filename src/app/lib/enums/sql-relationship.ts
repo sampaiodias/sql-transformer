@@ -1,6 +1,6 @@
 export enum SqlRelationship {
-  PrimaryKey,
   Column,
+  PrimaryKey,
   OneToOne,
   OneToMany,
   ManyToOne,

@@ -1,5 +1,5 @@
+import { SqlRelationship } from './enums/sql-relationship';
 import { VariableData } from './variable-data';
-import { TypeTranslator } from './type-translator';
 import { toSnake, toKebab, toCamel, toPascal } from './util/casing-utils';
 
 export class CsvToLanguageParser {
@@ -11,6 +11,8 @@ export class CsvToLanguageParser {
   camelName: string;
   snakeName: string;
   kebabName: string;
+
+  private readonly cellsPerLine = 4;
 
   constructor(csv: string, entityName: string, typeDictionary: Map<string, string>) {
     this.initializeNames(entityName);
@@ -25,10 +27,13 @@ export class CsvToLanguageParser {
         .replace(new RegExp('\r?\n', 'g'), ',')
         .split(',');
 
-      for (let i = 0; i < data.length; i += 2) {
+      for (let i = 0; i < data.length; i += this.cellsPerLine) {
         const varData = new VariableData();
-        varData.columnName = data[i];
-        varData.sqlDataType = this.translateType(data[i + 1].toUpperCase());
+        varData.name = data[i];
+        varData.columnName = data[i + 1];
+        varData.sqlDataType = this.translateType(data[i + 2].toUpperCase());
+        varData.relationship = this.translateRelationship(data[i + 3]);
+        console.log(varData);
         this.variablesData.set(data[i], varData);
       }
     }
@@ -98,5 +103,25 @@ export class CsvToLanguageParser {
 
   private translateType(type: string) {
     return this.typeDictionary.get(type);
+  }
+
+  private translateRelationship(relationship: string) {
+    const r = relationship.toUpperCase().replace(/ /g, '');
+    switch (r) {
+      case 'PRIMARYKEY':
+        return SqlRelationship.PrimaryKey;
+      case 'COLUMN':
+        return SqlRelationship.Column;
+      case 'ONETOONE':
+        return SqlRelationship.OneToOne;
+      case 'ONETOMANY':
+        return SqlRelationship.OneToMany;
+      case 'MANYTOONE':
+        return SqlRelationship.ManyToOne;
+      case 'MANYTOMANY':
+        return SqlRelationship.ManyToMany;
+      default:
+        return SqlRelationship.Column;
+    }
   }
 }

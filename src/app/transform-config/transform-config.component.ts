@@ -1,3 +1,4 @@
+import { SqlRelationship } from './../lib/enums/sql-relationship';
 import { JsonDictionaryTranslator } from './../lib/translators/json-dictionary-translator';
 import { TemplateMeta } from './../lib/template-meta';
 import { Template } from './../lib/template';
@@ -21,13 +22,23 @@ export class TransformConfigComponent implements OnInit {
 
   parser: CsvToLanguageParser;
   entityName = 'Favorite Product';
-  script = 'id,integer\nname,varchar\nprice,numeric';
+  script = 'id,id_favorite_product,integer,primary key\nname,ds_name,varchar,column\nprice,nr_price,numeric,column';
 
   showAddLine = false;
+  variableName = '';
   columnName = '';
   sqlTypeSelected = '';
   sqlTypeOptions: Array<string> = [];
   sqlTypeFilteredOptions: Array<string> = [];
+  relationshipSelected = '';
+  possibleRelationships = [
+    { label: 'Column', value: 'column' },
+    { label: 'Primary Key', value: 'primary key' },
+    { label: 'One to One', value: 'one to one' },
+    { label: 'One to Many', value: 'one to many' },
+    { label: 'Many to One', value: 'many to one' },
+    { label: 'One to Many', value: 'one to many' },
+  ];
 
   @Output()
   templatesReady: EventEmitter<Array<Template>> = new EventEmitter<Array<Template>>();
@@ -113,7 +124,8 @@ export class TransformConfigComponent implements OnInit {
 
   buttonAddLineConfirm() {
     this.showAddLine = false;
-    this.script += '\n' + this.columnName + ',' + this.sqlTypeSelected;
+    this.script += '\n' + this.variableName + ',' + this.columnName + ',' + this.sqlTypeSelected + ',' + this.relationshipSelected;
+    this.variableName = '';
     this.columnName = '';
     this.sqlTypeSelected = '';
   }

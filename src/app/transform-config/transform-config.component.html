@@ -56,6 +56,11 @@
   [contentStyle]="{ overflow: 'visible' }"
   [dismissableMask]="true"
 >
+  <p>Variable Name</p>
+  <div>
+    <input pInputText style="width: 100%;" [(ngModel)]="variableName" />
+  </div>
+  <br />
   <p>Column Name</p>
   <div>
     <input pInputText style="width: 100%;" [(ngModel)]="columnName" />
@@ -71,6 +76,10 @@
     styleClass="p-autocomplete"
     baseZIndex="10000"
   ></p-autoComplete>
+  <br />
+  <br />
+  <p>Relationship</p>
+  <p-dropdown [options]="possibleRelationships" [(ngModel)]="relationshipSelected" [style]="{ width: '100%' }"></p-dropdown>
   <p-footer>
     <button type="button" pButton icon="pi pi-check" (click)="buttonAddLineConfirm()" label="Add"></button>
     <button type="button" pButton icon="pi pi-times" (click)="buttonAddLineCancel()" label="Cancel" class="ui-button-secondary"></button>

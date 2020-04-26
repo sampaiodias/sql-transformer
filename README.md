@@ -51,7 +51,7 @@ public class %ENTITY_NAME_PASCAL% implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 %VARIABLES_BEGIN%
-    @Column(name="%VARIABLE_NAME%")
+    @Column(name="%VARIABLE_COLUMN%")
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
 %VARIABLES_END%
 }
@@ -88,3 +88,12 @@ These are the special words replaced by the transformer inside the variables blo
 - %VARIABLE_NAME_KEBAB%
 - %VARIABLE_NAME_KEBAB_UPPER%
 - %VARIABLE_NAME_KEBAB_LOWER%
+- %VARIABLE_COLUMN%
+- %VARIABLE_COLUMN_PASCAL%
+- %VARIABLE_COLUMN_CAMEL%
+- %VARIABLE_COLUMN_SNAKE%
+- %VARIABLE_COLUMN_SNAKE_UPPER%
+- %VARIABLE_COLUMN_SNAKE_LOWER%
+- %VARIABLE_COLUMN_KEBAB%
+- %VARIABLE_COLUMN_KEBAB_UPPER%
+- %VARIABLE_COLUMN_KEBAB_LOWER%

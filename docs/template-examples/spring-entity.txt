@@ -13,7 +13,7 @@ public class %ENTITY_NAME_PASCAL% implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 %VARIABLES_BEGIN%
-    @Column(name="%VARIABLE_NAME%")
+    @Column(name="%VARIABLE_COLUMN%")
     private %VARIABLE_TYPE% %VARIABLE_NAME_CAMEL%;
 %VARIABLES_END%
 }

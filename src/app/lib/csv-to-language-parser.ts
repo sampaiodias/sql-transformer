@@ -86,15 +86,24 @@ export class CsvToLanguageParser {
     for (const data of this.variablesData.values()) {
       const newSection = variablesSection
         .replace(/%VARIABLE_TYPE%/g, data.sqlDataType)
-        .replace(/%VARIABLE_NAME%/g, data.columnName)
-        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(data.columnName))
-        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(data.columnName))
-        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(data.columnName))
-        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(data.columnName).toUpperCase())
-        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(data.columnName).toLowerCase())
-        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(data.columnName))
-        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(data.columnName).toUpperCase())
-        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(data.columnName).toLowerCase());
+        .replace(/%VARIABLE_NAME%/g, data.name)
+        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(data.name))
+        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(data.name))
+        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(data.name))
+        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(data.name).toUpperCase())
+        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(data.name).toLowerCase())
+        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(data.name))
+        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(data.name).toUpperCase())
+        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(data.name).toLowerCase())
+        .replace(/%VARIABLE_COLUMN%/g, data.columnName)
+        .replace(/%VARIABLE_COLUMN_PASCAL%/g, toPascal(data.columnName))
+        .replace(/%VARIABLE_COLUMN_CAMEL%/g, toCamel(data.columnName))
+        .replace(/%VARIABLE_COLUMN_SNAKE%/g, toSnake(data.columnName))
+        .replace(/%VARIABLE_COLUMN_SNAKE_UPPER%/g, toSnake(data.columnName).toUpperCase())
+        .replace(/%VARIABLE_COLUMN_SNAKE_LOWER%/g, toSnake(data.columnName).toLowerCase())
+        .replace(/%VARIABLE_COLUMN_KEBAB%/g, toKebab(data.columnName))
+        .replace(/%VARIABLE_COLUMN_KEBAB_UPPER%/g, toKebab(data.columnName).toUpperCase())
+        .replace(/%VARIABLE_COLUMN_KEBAB_LOWER%/g, toKebab(data.columnName).toLowerCase());
       v += newSection;
     }
 

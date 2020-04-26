@@ -64,7 +64,7 @@ export class TransformConfigComponent implements OnInit {
   }
 
   private getParser(): CsvToLanguageParser {
-    return new CsvToLanguageParser(this.script, this.entityName, this.typeTranslator);
+    return new CsvToLanguageParser(this.script, this.entityName, this.typeTranslator.typeMap());
   }
 
   dictionaryFilePick(fileData: ReadFile) {

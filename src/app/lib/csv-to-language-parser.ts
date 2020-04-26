@@ -1,8 +1,10 @@
+import { VariableData } from './variable-data';
 import { TypeTranslator } from './type-translator';
 import { toSnake, toKebab, toCamel, toPascal } from './util/casing-utils';
 
 export class CsvToLanguageParser {
-  variables: Map<string, string>;
+  typeDictionary: Map<string, string>;
+  variablesData: Map<string, VariableData>;
 
   entityName: string;
   pascalName: string;
@@ -10,11 +12,10 @@ export class CsvToLanguageParser {
   snakeName: string;
   kebabName: string;
 
-  constructor(csv: string, entityName: string, translator: TypeTranslator) {
+  constructor(csv: string, entityName: string, typeDictionary: Map<string, string>) {
     this.initializeNames(entityName);
-    this.variables = translator.typeMap();
-
-    const map = new Map<string, string>();
+    this.typeDictionary = typeDictionary;
+    this.variablesData = new Map<string, VariableData>();
 
     if (csv) {
       const data = csv
@@ -25,11 +26,12 @@ export class CsvToLanguageParser {
         .split(',');
 
       for (let i = 0; i < data.length; i += 2) {
-        map.set(data[i], this.translateType(data[i + 1].toUpperCase()));
+        const varData = new VariableData();
+        varData.columnName = data[i];
+        varData.sqlDataType = this.translateType(data[i + 1].toUpperCase());
+        this.variablesData.set(data[i], varData);
       }
     }
-
-    this.variables = map;
   }
 
   private initializeNames(entityName: string) {
@@ -76,18 +78,18 @@ export class CsvToLanguageParser {
     );
 
     let v = '';
-    for (const variable of this.variables) {
+    for (const data of this.variablesData.values()) {
       const newSection = variablesSection
-        .replace(/%VARIABLE_TYPE%/g, variable[1])
-        .replace(/%VARIABLE_NAME%/g, variable[0])
-        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(variable[0]))
-        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(variable[0]))
-        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(variable[0]))
-        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(variable[0]).toUpperCase())
-        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(variable[0]).toLowerCase())
-        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(variable[0]))
-        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(variable[0]).toUpperCase())
-        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(variable[0]).toLowerCase());
+        .replace(/%VARIABLE_TYPE%/g, data.sqlDataType)
+        .replace(/%VARIABLE_NAME%/g, data.columnName)
+        .replace(/%VARIABLE_NAME_PASCAL%/g, toPascal(data.columnName))
+        .replace(/%VARIABLE_NAME_CAMEL%/g, toCamel(data.columnName))
+        .replace(/%VARIABLE_NAME_SNAKE%/g, toSnake(data.columnName))
+        .replace(/%VARIABLE_NAME_SNAKE_UPPER%/g, toSnake(data.columnName).toUpperCase())
+        .replace(/%VARIABLE_NAME_SNAKE_LOWER%/g, toSnake(data.columnName).toLowerCase())
+        .replace(/%VARIABLE_NAME_KEBAB%/g, toKebab(data.columnName))
+        .replace(/%VARIABLE_NAME_KEBAB_UPPER%/g, toKebab(data.columnName).toUpperCase())
+        .replace(/%VARIABLE_NAME_KEBAB_LOWER%/g, toKebab(data.columnName).toLowerCase());
       v += newSection;
     }
 
@@ -95,6 +97,6 @@ export class CsvToLanguageParser {
   }
 
   private translateType(type: string) {
-    return this.variables.get(type);
+    return this.typeDictionary.get(type);
   }
 }

@@ -40,6 +40,8 @@ export class TransformConfigComponent implements OnInit {
     { label: 'One to Many', value: 'one to many' },
   ];
 
+  private readonly supportedTemplateVersions = ['2.0'];
+
   @Output()
   templatesReady: EventEmitter<Array<Template>> = new EventEmitter<Array<Template>>();
 
@@ -98,20 +100,36 @@ export class TransformConfigComponent implements OnInit {
   }
 
   templateFilePick(fileData: ReadFile) {
-    let content: string = fileData.content;
-    content = atob(content.slice(content.indexOf(',') + 1));
+    try {
+      let content: string = fileData.content;
+      content = atob(content.slice(content.indexOf(',') + 1));
 
-    if (!this.isTemplateFile(content)) {
-      this.toast('Parse Error!', 'Selected file is not a valid SQL Transformer Template.');
-      return;
+      if (!this.isTemplateFile(content)) {
+        this.toast('Invalid Template Header!', fileData.name + ' is not a valid SQL Transformer Template (missing "SQLTT=").');
+        return;
+      }
+
+      let meta: TemplateMeta;
+      try {
+        meta = JSON.parse(content.slice(6, content.indexOf('\n') + 1));
+      } catch (error) {
+        this.toast('Invalid Template Header!', fileData.name + ' is not a valid SQL Transformer Template (invalid JSON).');
+        return;
+      }
+
+      if (!this.isSupportedTemplateFile(meta)) {
+        this.toast('Deprecated Template!', fileData.name + ' was made with a deprecated Template version. Please, update your Template.');
+      }
+
+      content = content.substring(content.indexOf('\n') + 1);
+
+      const template = new Template(content, meta);
+
+      this.templatesPicked.push(template);
+    } catch (error) {
+      this.toast('Invalid Template!', fileData.name + ' is not a valid SQL Transformer Template (unknown error).');
+      console.log(error);
     }
-
-    const meta: TemplateMeta = JSON.parse(content.slice(6, content.indexOf('\n') + 1));
-    content = content.substring(content.indexOf('\n') + 1);
-
-    const template = new Template(content, meta);
-
-    this.templatesPicked.push(template);
   }
 
   buttonTransformIsDisabled() {
@@ -145,6 +163,10 @@ export class TransformConfigComponent implements OnInit {
 
   private isTemplateFile(fileContent: string) {
     return fileContent.startsWith('SQLTT=');
+  }
+
+  private isSupportedTemplateFile(templateMeta: TemplateMeta) {
+    return this.supportedTemplateVersions.includes(templateMeta.version);
   }
 
   private toast(title: string, subtitle: string, type: string = 'error', duration: number = 10000) {

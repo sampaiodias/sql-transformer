@@ -1,4 +1,4 @@
-SQLTT={"version":"2.0","fileName":"%ENTITY_NAME_KEBAB%","fileExtension":"ts"}
+SQLTT={"version":"2.0","fileName":"%ENTITY_NAME_KEBAB%","fileExtension":"js"}
 export class %ENTITY_NAME_PASCAL% {
 %VARIABLES_BEGIN%
 %PRIMARY_KEY_BEGIN%

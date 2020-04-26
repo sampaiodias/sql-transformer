@@ -43,11 +43,13 @@ export class TransformConfigComponent implements OnInit {
     }
     try {
       this.parser = this.getParser();
+      const templates = new Array<Template>();
       for (let i = 0; i < this.templatesPicked.length; i++) {
-        this.templatesPicked[i].content = this.parser.transform(this.templatesPicked[i].content);
-        this.templatesPicked[i].meta.fileName = this.parser.replaceEntityNames(this.templatesPicked[i].meta.fileName);
+        templates[i] = new Template();
+        templates[i].content = this.parser.transform(this.templatesPicked[i].content);
+        templates[i].meta.fileName = this.parser.replaceEntityNames(this.templatesPicked[i].meta.fileName);
       }
-      this.templatesReady.emit(this.templatesPicked);
+      this.templatesReady.emit(templates);
       this.toast('Transform successful!', '', 'success', 3000);
     } catch (error) {
       this.toast('Unknown Parse Error!', 'Check the console for more information');

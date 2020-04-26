@@ -54,10 +54,6 @@ export class TransformConfigComponent implements OnInit {
       this.toast('No templates selected!', 'Please, select one or more template files to proceed', 'warn');
       return;
     }
-    if (this.typeTranslator == null) {
-      this.toast('No Type Dictionary selected!', 'Please, select one Type Dictionary file to proceed', 'warn');
-      return;
-    }
     try {
       this.parser = this.getParser();
       const templates = new Array<Template>();
@@ -77,7 +73,13 @@ export class TransformConfigComponent implements OnInit {
   }
 
   private getParser(): CsvToLanguageParser {
-    return new CsvToLanguageParser(this.script, this.entityName, this.typeTranslator.typeMap());
+    let typeMap: Map<string, string>;
+    if (!this.typeTranslator) {
+      typeMap = new Map<string, string>();
+    } else {
+      typeMap = this.typeTranslator.typeMap();
+    }
+    return new CsvToLanguageParser(this.script, this.entityName, typeMap);
   }
 
   dictionaryFilePick(fileData: ReadFile) {
@@ -133,7 +135,7 @@ export class TransformConfigComponent implements OnInit {
   }
 
   buttonTransformIsDisabled() {
-    return !this.entityName || this.typeTranslator == null || !this.templatesCount;
+    return !this.entityName || !this.templatesCount;
   }
 
   buttonAddLine() {

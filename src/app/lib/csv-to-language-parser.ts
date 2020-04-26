@@ -5,7 +5,7 @@ import { toSnake, toKebab, toCamel, toPascal } from './util/casing-utils';
 export class CsvToLanguageParser {
   typeDictionary: Map<string, string>;
   variablesData: Map<string, VariableData>;
-
+  keys: Array<string>;
   entityName: string;
   pascalName: string;
   camelName: string;
@@ -17,6 +17,7 @@ export class CsvToLanguageParser {
   constructor(csv: string, entityName: string, typeDictionary: Map<string, string>) {
     this.initializeNames(entityName);
     this.typeDictionary = typeDictionary;
+    this.keys = [...this.typeDictionary.keys()];
     this.variablesData = new Map<string, VariableData>();
 
     if (csv) {
@@ -160,6 +161,9 @@ export class CsvToLanguageParser {
   }
 
   private translateType(type: string) {
+    if (!this.keys.includes(type)) {
+      return type;
+    }
     return this.typeDictionary.get(type);
   }
 

@@ -37,7 +37,7 @@ export class TransformConfigComponent implements OnInit {
     { label: 'One to One', value: 'one to one' },
     { label: 'One to Many', value: 'one to many' },
     { label: 'Many to One', value: 'many to one' },
-    { label: 'One to Many', value: 'one to many' },
+    { label: 'Many to Many', value: 'many to many' },
   ];
 
   private readonly supportedTemplateVersions = ['2.0'];

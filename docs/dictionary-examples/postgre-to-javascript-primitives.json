@@ -1,0 +1,80 @@
+{
+  "dictionary": [
+    {
+      "key": "CHARACTER",
+      "value": "string"
+    },
+    {
+      "key": "VARCHAR",
+      "value": "string"
+    },
+    {
+      "key": "LONGVARCHAR",
+      "value": "string"
+    },
+    {
+      "key": "NUMERIC",
+      "value": "number"
+    },
+    {
+      "key": "DECIMAL",
+      "value": "number"
+    },
+    {
+      "key": "BIT",
+      "value": "boolean"
+    },
+    {
+      "key": "TINYINT",
+      "value": "number"
+    },
+    {
+      "key": "SMALLINT",
+      "value": "number"
+    },
+    {
+      "key": "INTEGER",
+      "value": "number"
+    },
+    {
+      "key": "BIGINT",
+      "value": "number"
+    },
+    {
+      "key": "REAL",
+      "value": "number"
+    },
+    {
+      "key": "FLOAT",
+      "value": "number"
+    },
+    {
+      "key": "DOUBLE PRECISION",
+      "value": "number"
+    },
+    {
+      "key": "BINARY",
+      "value": "byte[]"
+    },
+    {
+      "key": "VARBINARY",
+      "value": "byte[]"
+    },
+    {
+      "key": "LONGVARBINARY",
+      "value": "byte[]"
+    },
+    {
+      "key": "DATE",
+      "value": "string"
+    },
+    {
+      "key": "TIME",
+      "value": "string"
+    },
+    {
+      "key": "TIMESTAMP",
+      "value": "string"
+    }
+  ]
+}

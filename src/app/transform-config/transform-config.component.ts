@@ -1,3 +1,4 @@
+import { JsonDictionaryTranslator } from './../lib/translators/json-dictionary-translator';
 import { PostgreToJavascriptPrimitivesTranslator } from './../lib/translators/postgre-to-javascript-primitives-translator';
 import { TemplateMeta } from './../lib/template-meta';
 import { Template } from './../lib/template';
@@ -17,17 +18,12 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./transform-config.component.scss'],
 })
 export class TransformConfigComponent implements OnInit {
-  dialectOptions = [{ label: 'PostgreSQL', value: ParseableDialect.PostgreSQL }];
-  languageOptions = [
-    { label: 'Java', value: ParseableLanguage.Java },
-    { label: 'Javascript (Primitives)', value: ParseableLanguage.JavascriptPrimitives },
-  ];
+  typeDictionaryFileName: string;
+  typeTranslator: TypeTranslator;
   templatesPicked: Array<Template>;
   templatesCount = 0;
 
   parser: CsvToLanguageParser;
-  dialect: ParseableDialect;
-  language: ParseableLanguage;
   entityName = 'Favorite Product';
   script = 'id,integer\nname,varchar(255)\nprice,numeric';
 
@@ -36,14 +32,15 @@ export class TransformConfigComponent implements OnInit {
 
   constructor(private messageService: MessageService) {}
 
-  ngOnInit() {
-    this.dialect = this.dialectOptions[0].value;
-    this.language = this.languageOptions[0].value;
-  }
+  ngOnInit() {}
 
   transformButton() {
     if (this.templatesCount === 0) {
       this.toast('No templates selected!', 'Please, select one or more template files to proceed', 'warn');
+      return;
+    }
+    if (this.typeTranslator == null) {
+      this.toast('No Type Dictionary selected!', 'Please, select one Type Dictionary file to proceed', 'warn');
       return;
     }
     try {
@@ -53,6 +50,7 @@ export class TransformConfigComponent implements OnInit {
         this.templatesPicked[i].meta.fileName = this.parser.replaceEntityNames(this.templatesPicked[i].meta.fileName);
       }
       this.templatesReady.emit(this.templatesPicked);
+      this.toast('Transform successful!', '', 'success', 3000);
     } catch (error) {
       this.toast('Unknown Parse Error!', 'Check the console for more information');
       console.log(error);
@@ -60,33 +58,28 @@ export class TransformConfigComponent implements OnInit {
   }
 
   private getParser(): CsvToLanguageParser {
-    switch (this.dialect) {
-      case ParseableDialect.PostgreSQL:
-        return new CsvToLanguageParser(this.script, this.entityName, this.getTranslator());
-      default:
-        this.toast('Unsupported operation!', 'No parser found for dialect ' + this.dialect);
-        return null;
+    return new CsvToLanguageParser(this.script, this.entityName, this.typeTranslator);
+  }
+
+  dictionaryFilePick(fileData: ReadFile) {
+    try {
+      let content: string = fileData.content;
+      content = atob(content.slice(content.indexOf(',') + 1));
+      this.typeTranslator = new JsonDictionaryTranslator(content);
+      this.typeDictionaryFileName = fileData.name;
+    } catch (error) {
+      this.typeTranslator = null;
+      this.typeDictionaryFileName = '';
+      this.toast('Invalid Dictionary!', 'The Type Dictionary file could not be read (it is likely malformed)');
     }
   }
 
-  private getTranslator(): TypeTranslator {
-    switch (this.language) {
-      case ParseableLanguage.Java:
-        return new PostgreToJavaTranslator();
-      case ParseableLanguage.JavascriptPrimitives:
-        return new PostgreToJavascriptPrimitivesTranslator();
-      default:
-        this.toast('Unsupported operation!', 'No parser found for language ' + this.language + ' using dialect ' + this.dialect);
-        return null;
-    }
-  }
-
-  fileReadStart(fileCount: number) {
+  templateFileReadStart(fileCount: number) {
     this.templatesPicked = new Array<Template>();
     this.templatesCount = fileCount;
   }
 
-  filePick(fileData: ReadFile) {
+  templateFilePick(fileData: ReadFile) {
     let content: string = fileData.content;
     content = atob(content.slice(content.indexOf(',') + 1));
 

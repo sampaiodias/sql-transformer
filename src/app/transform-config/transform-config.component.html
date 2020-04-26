@@ -5,16 +5,6 @@
   </div>
   <br />
   <div>
-    <p>Target Language</p>
-    <p-dropdown [style]="{ width: '100%' }" [options]="languageOptions" [(ngModel)]="language"></p-dropdown>
-  </div>
-  <br />
-  <div>
-    <p>Dialect</p>
-    <p-dropdown [style]="{ width: '100%' }" [options]="dialectOptions" [(ngModel)]="dialect"></p-dropdown>
-  </div>
-  <br />
-  <div>
     <p>Variables (CSV)</p>
     <textarea
       pInputTextarea
@@ -26,6 +16,12 @@
   </div>
   <br />
   <div>
+    <p>Type Dictionary</p>
+    <button type="button" pButton ngxFilePicker accept="*json" label="Select Files" (filePick)="dictionaryFilePick($event)"></button>
+    <span style="margin-left: 10px;">File: {{ typeDictionaryFileName }}</span>
+  </div>
+  <br />
+  <div>
     <p>Templates</p>
     <button
       type="button"
@@ -34,8 +30,8 @@
       accept="text/*"
       multiple
       label="Select Files"
-      (filePick)="filePick($event)"
-      (readStart)="fileReadStart($event)"
+      (filePick)="templateFilePick($event)"
+      (readStart)="templateFileReadStart($event)"
     ></button>
     <span style="margin-left: 10px;">Templates: {{ templatesCount }}</span>
   </div>
